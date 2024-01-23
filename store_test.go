@@ -22,7 +22,7 @@ func TestKeyValueStoreInsertAndGet(t *testing.T) {
 	}
 }
 
-func TestKeyValueStorePersist(t *testing.T) {
+func TestKeyValueStorePersistAndLoad(t *testing.T) {
 	key := "one"
 	value := "1"
 
@@ -50,5 +50,34 @@ func TestKeyValueStorePersist(t *testing.T) {
 
 	if dbFileLine != expectedResult {
 		t.Errorf("Should output "+expectedResult+" but got: ", dbFileLine)
+	}
+}
+
+func TestKeyValueStoreLoad(t *testing.T) {
+	key := "one"
+	value := "1"
+
+	keyValue := key + ":" + value
+
+	filePath := "keyvalue.db"
+
+	file, err := os.Create(filePath)
+
+	if err != nil {
+		return
+	}
+
+	defer file.Close()
+
+	_, err = file.WriteString(keyValue)
+
+	store := NewKeyValueStore()
+
+	store.Load()
+
+	result := store.Get(key)
+
+	if store.Get(key) != value {
+		t.Errorf("expected "+value+" but got: ", result)
 	}
 }

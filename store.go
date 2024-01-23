@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
 	"os"
+	"strings"
 )
 
 type KeyValueStore struct {
@@ -58,4 +61,27 @@ func (s *KeyValueStore) Persist() error {
 	_, err = file.WriteString(ToString(s))
 
 	return err
+}
+
+func (s *KeyValueStore) Load() error {
+	file, err := os.Open("keyvalue.db")
+
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return nil
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		dbFileLine := scanner.Text()
+
+		words := strings.Split(dbFileLine, ":")
+
+		s.Insert(words[0], words[1])
+	}
+
+	return nil
 }
