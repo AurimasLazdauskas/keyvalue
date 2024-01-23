@@ -10,6 +10,10 @@ type KeyValueStore struct {
 	data map[string]string
 }
 
+func NewKeyValueStore() *KeyValueStore {
+	return &KeyValueStore{data: make(map[string]string)}
+}
+
 func (s *KeyValueStore) Insert(k string, v string) error {
 	_, exists := s.data[k]
 

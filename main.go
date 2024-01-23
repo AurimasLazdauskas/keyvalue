@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	store := KeyValueStore{data: make(map[string]string)}
+	store := NewKeyValueStore()
 
 	store.Insert("Rex", "dog")
 	store.Insert("Snowball", "cat")

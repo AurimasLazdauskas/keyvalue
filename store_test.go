@@ -2,15 +2,13 @@ package main
 
 import "testing"
 
-func TestKeyValueStoreGet(t *testing.T) {
+func TestKeyValueStoreInsertAndGet(t *testing.T) {
 	key := "one"
 	value := "1"
 
-	data := make(map[string]string)
+	store := NewKeyValueStore()
 
-	data[key] = value
-
-	store := KeyValueStore{data: data}
+	store.Insert(key, value)
 
 	result := store.Get(key)
 
