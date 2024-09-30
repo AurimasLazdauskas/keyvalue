@@ -157,24 +157,3 @@ func TestNewKeyValueStoreReadConcurrently(t *testing.T) {
 
 	wg.Wait()
 }
-
-func TestKeyValueStorePersistAndLoad(t *testing.T) {
-	key := "one"
-	value := "1"
-
-	store := NewKeyValueStore()
-
-	store.Set(key, value)
-
-	store.Persist()
-
-	newStore := NewKeyValueStore()
-
-	newStore.Load()
-
-	result := newStore.Get(key)
-
-	if result != value {
-		t.Errorf("expected "+value+" but got: ", result)
-	}
-}

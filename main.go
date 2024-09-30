@@ -18,8 +18,6 @@ func main() {
 
 	fmt.Println(store)
 
-	store.Persist()
-
 	return
 
 	exit := false
