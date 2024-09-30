@@ -11,10 +11,10 @@ import (
 func main() {
 	store := NewKeyValueStore()
 
-	store.Insert("Rex", "dog")
-	store.Insert("Snowball", "cat")
-	store.Insert("Stuart", "mouse")
-	store.Insert("Stuart", "mouse")
+	store.Set("Rex", "dog")
+	store.Set("Snowball", "cat")
+	store.Set("Stuart", "mouse")
+	store.Set("Stuart", "mouse")
 
 	fmt.Println(store)
 
@@ -44,7 +44,7 @@ func main() {
 			k := strings.Fields(line)[1]
 			v := strings.Fields(line)[2]
 
-			store.Insert(k, v)
+			store.Set(k, v)
 		case "get":
 			k := strings.Fields(line)[1]
 

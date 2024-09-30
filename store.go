@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -17,16 +16,8 @@ func NewKeyValueStore() *KeyValueStore {
 	return &KeyValueStore{data: make(map[string]string)}
 }
 
-func (s *KeyValueStore) Insert(k string, v string) error {
-	_, exists := s.data[k]
-
-	if exists {
-		return errors.New("Key already exists")
-	}
-
+func (s *KeyValueStore) Set(k string, v string) {
 	s.data[k] = v
-
-	return nil
 }
 
 func (s *KeyValueStore) Get(k string) string {
@@ -80,7 +71,7 @@ func (s *KeyValueStore) Load() error {
 
 		words := strings.Split(dbFileLine, ":")
 
-		s.Insert(words[0], words[1])
+		s.Set(words[0], words[1])
 	}
 
 	return nil
