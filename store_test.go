@@ -36,6 +36,80 @@ func TestKeyValueStoreSetExistingKey(t *testing.T) {
 	}
 }
 
+func TestKeyValueStoreFetchNonExistingKey(t *testing.T) {
+	key := "one"
+
+	store := NewKeyValueStore()
+
+	result := store.Get(key)
+
+	if result != "" {
+		t.Errorf(key+" should output empty but got: ", result)
+	}
+}
+
+func TestKeyValueStoreDelete(t *testing.T) {
+	key := "one"
+	value := "1"
+
+	store := NewKeyValueStore()
+
+	store.Set(key, value)
+
+	store.Delete(key)
+
+	result := store.Get(key)
+
+	if result != "" {
+		t.Errorf(key+" should output empty but got: ", result)
+	}
+}
+
+func TestNewKeyValueStoreDeleteNonExistingKey(t *testing.T) {
+	key := "one"
+
+	store := NewKeyValueStore()
+
+	store.Delete(key)
+
+	result := store.Get(key)
+
+	if result != "" {
+		t.Errorf(key+" should output empty but got: ", result)
+	}
+
+}
+
+func TestKeyValueStoreSettingKeyToEmptyString(t *testing.T) {
+	key := "one"
+	value := ""
+
+	store := NewKeyValueStore()
+
+	store.Set(key, value)
+
+	result := store.Get(key)
+
+	if result != value {
+		t.Errorf(key+" should output empty but got: ", result)
+	}
+}
+
+func TestNewKeyValueStoreUsingEmptyStringAsKey(t *testing.T) {
+	key := ""
+	value := "1"
+
+	store := NewKeyValueStore()
+
+	store.Set(key, value)
+
+	result := store.Get(key)
+
+	if result != value {
+		t.Errorf(key+" should output "+value+" but got: ", result)
+	}
+}
+
 func TestKeyValueStorePersistAndLoad(t *testing.T) {
 	key := "one"
 	value := "1"
