@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sync"
 	"testing"
 )
 
@@ -108,6 +109,53 @@ func TestNewKeyValueStoreUsingEmptyStringAsKey(t *testing.T) {
 	if result != value {
 		t.Errorf(key+" should output "+value+" but got: ", result)
 	}
+}
+
+func SetGetAndCheck(store *KeyValueStore, key string, value string, t *testing.T) {
+	store.Set(key, value)
+}
+
+func TestNewKeyValueStoreInsertingConcurrently(t *testing.T) {
+	key := "one"
+	value := "1"
+
+	store := NewKeyValueStore()
+
+	iterations := 1000
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < iterations; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			store.Set(key, value)
+		}()
+	}
+
+	wg.Wait()
+}
+
+func TestNewKeyValueStoreReadConcurrently(t *testing.T) {
+	key := "one"
+	value := "1"
+
+	store := NewKeyValueStore()
+	store.Set(key, value)
+
+	iterations := 1000
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < iterations; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			store.Get(key)
+		}()
+	}
+
+	wg.Wait()
 }
 
 func TestKeyValueStorePersistAndLoad(t *testing.T) {
