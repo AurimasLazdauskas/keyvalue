@@ -37,7 +37,7 @@ func (s *KeyValueStore) Delete(k string) {
 	delete(s.data, k)
 }
 
-func ToString(s *KeyValueStore) string {
+func (s *KeyValueStore) ToString() string {
 	var b bytes.Buffer
 
 	for key, value := range s.data {
@@ -58,7 +58,7 @@ func (s *KeyValueStore) Persist() error {
 
 	defer file.Close()
 
-	_, err = file.WriteString(ToString(s))
+	_, err = file.WriteString(s.ToString())
 
 	return err
 }
