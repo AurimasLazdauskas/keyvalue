@@ -4,18 +4,35 @@ import (
 	"testing"
 )
 
-func TestKeyValueStoreInsertAndGet(t *testing.T) {
+func TestKeyValueStoreSetAndGet(t *testing.T) {
 	key := "one"
 	value := "1"
 
 	store := NewKeyValueStore()
 
-	store.Insert(key, value)
+	store.Set(key, value)
 
 	result := store.Get(key)
 
 	if result != value {
 		t.Errorf(key+" should output "+value+" but got: ", result)
+	}
+}
+
+func TestKeyValueStoreSetExistingKey(t *testing.T) {
+	key := "one"
+	value := "1"
+
+	store := NewKeyValueStore()
+
+	store.Set(key, value)
+
+	store.Set(key, "2")
+
+	result := store.Get(key)
+
+	if result != "2" {
+		t.Errorf(key+" should output 2 but got: ", result)
 	}
 }
 
@@ -25,7 +42,7 @@ func TestKeyValueStorePersistAndLoad(t *testing.T) {
 
 	store := NewKeyValueStore()
 
-	store.Insert(key, value)
+	store.Set(key, value)
 
 	store.Persist()
 
