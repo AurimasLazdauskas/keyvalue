@@ -6,34 +6,42 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 )
 
 type KeyValueStore struct {
-	data map[string]string
+	data sync.Map
 }
 
 func NewKeyValueStore() *KeyValueStore {
-	return &KeyValueStore{data: make(map[string]string)}
+	return &KeyValueStore{data: sync.Map{}}
 }
 
 func (s *KeyValueStore) Set(k string, v string) {
-	s.data[k] = v
+	s.data.Store(k, v)
 }
 
 func (s *KeyValueStore) Get(k string) string {
-	return s.data[k]
+	value, _ := s.data.Load(k)
+
+	if value == nil {
+		return ""
+	}
+
+	return value.(string)
 }
 
 func (s *KeyValueStore) Delete(k string) {
-	delete(s.data, k)
+	s.data.Delete(k)
 }
 
 func (s *KeyValueStore) ToString() string {
 	var b bytes.Buffer
 
-	for key, value := range s.data {
-		b.WriteString(key + ":" + value + "\n")
-	}
+	s.data.Range(func(key, value interface{}) bool {
+		b.WriteString(key.(string) + ":" + value.(string) + "\n")
+		return true
+	})
 
 	return b.String()
 }
